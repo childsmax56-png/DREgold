@@ -67,6 +67,27 @@ export const onRequestGet: PagesFunction = async (context) => {
     // Header rows have '\n' in the Era field (file count summaries).
     // Stats rows also have '\n' but Name starts with digits followed by a space — skip those.
     const validEraNames = new Set<string>();
+
+    // Eras that have song rows but no header row in the CSV — seed them manually.
+    const HEADERLESS_ERAS: string[] = [
+      "100 Miles & Runnin'",
+      '2001',
+    ];
+    for (const name of HEADERLESS_ERAS) {
+      validEraNames.add(name);
+      eras[name] = {
+        name,
+        data: {
+          'OG File(s)': [],
+          'Full': [],
+          'Tagged': [],
+          'Partial': [],
+          'Snippet(s)': [],
+          'Unavailable': [],
+        },
+      };
+    }
+
     for (const row of rows) {
       const eraField = row['Era'] ?? '';
       if (!eraField.includes('\n')) continue;

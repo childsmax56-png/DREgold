@@ -8,6 +8,25 @@ function parseSongName(raw: string): { name: string; extra: string | undefined }
   return { name, extra };
 }
 
+// Map short song-row era names to their canonical header-row names.
+const SONG_ERA_NORM: Record<string, string> = {
+  'Murder Was The Case':          'Murder Was the Case: The Soundtrack',
+  'The Aftermath':                'Dr. Dre Presents... The Aftermath',
+  'Untitled Sharief Album':       'Untitled Sharief (AKA Killa Ben) Album',
+  "Who's Who Rulez":              "Who'z Who Rulez",
+  'Name & Address':               'Name and Address',
+  'The Wash':                     'The Wash (The Original Motion Picture Soundtrack)',
+  'D&T Present: Hayes':           'Dr. Dre & Timbaland Present: Hayes',
+  'Only Built 4 Cuban Linx Pt. 2':'Only Built 4 Cuban Linx... Pt. II',
+  'Untitled Marsha Album':        'Untitled Marsha Ambrosius Album',
+  'S.O.O.N.':                    'S.O.O.N. (Something Out of Nothing)',
+  'Side B':                       'Music To Be Murdered By: Side B',
+};
+
+function mapSongEra(name: string): string {
+  return SONG_ERA_NORM[name] ?? name;
+}
+
 // Map Portion column values to display category keys.
 function portionToCategory(portion: string): string {
   switch (portion.trim()) {
@@ -82,13 +101,14 @@ export const onRequestGet: PagesFunction = async (context) => {
           },
         };
       } else if (eraField) {
-        // Song row
+        // Song row — normalise short era aliases to canonical header names
         const rawEra = eraField.trim();
-        if (!validEraNames.has(rawEra)) continue;
+        const eraName = mapSongEra(rawEra);
+        if (!validEraNames.has(eraName)) continue;
 
-        if (!eras[rawEra]) {
-          eras[rawEra] = {
-            name: rawEra,
+        if (!eras[eraName]) {
+          eras[eraName] = {
+            name: eraName,
             data: {
               'OG File(s)': [],
               'Full': [],
@@ -104,7 +124,7 @@ export const onRequestGet: PagesFunction = async (context) => {
         const links = (row['Link(s)'] ?? '').split('\n').map((l: string) => l.trim()).filter(Boolean);
         const category = portionToCategory(row['Portion'] ?? '');
 
-        eras[rawEra].data[category].push({
+        eras[eraName].data[category].push({
           name,
           extra: extra ?? undefined,
           description: row['Notes'] ?? '',
