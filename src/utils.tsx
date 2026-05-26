@@ -5,7 +5,8 @@ import { saveAs } from 'file-saver';
 import { useSettings } from './SettingsContext';
 
 // All artist-specific constants come from artist.config.ts
-export { TAG_TOOLTIP_MAP, TAG_MAP, CUSTOM_IMAGES, ALBUM_RELEASE_DATES, HIDDEN_ALBUMS, ALBUM_DESCRIPTIONS } from './artist.config';
+import { TAG_TOOLTIP_MAP, TAG_MAP, CUSTOM_IMAGES, ALBUM_RELEASE_DATES, HIDDEN_ALBUMS, ALBUM_DESCRIPTIONS } from './artist.config';
+export { TAG_TOOLTIP_MAP, TAG_MAP, CUSTOM_IMAGES, ALBUM_RELEASE_DATES, HIDDEN_ALBUMS, ALBUM_DESCRIPTIONS };
 
 
 export const FILTER_TOOLTIPS: Record<string, string> = {
@@ -58,7 +59,7 @@ export function getSongSlug(song: any, allSongsInCollection: any[]): string {
 }
 
 export function getArtistName(_eraName: string | undefined): string {
-  return "XXXTENTACION";
+  return "Dr. Dre";
 }
 
 export function buildArtistTag(songName: string, eraName: string | undefined): string {
