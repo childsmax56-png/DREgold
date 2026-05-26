@@ -24,6 +24,7 @@ export interface EraData {
 export interface Era {
   name: string;
   extra?: string;
+  description?: string;
   timeline?: string;
   fileInfo?: string[];
   image?: string;

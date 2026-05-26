@@ -529,12 +529,12 @@ export function EraDetail({ era, onBack, onPlaySong, searchQuery = '', filters, 
               </div>
             )}
 
-            {ALBUM_DESCRIPTIONS[era.name] && (
+            {(era.description || ALBUM_DESCRIPTIONS[era.name]) && (
               <div className="mb-2 max-w-3xl">
                 <p className={`text-white/80 text-sm leading-relaxed ${isDescriptionExpanded ? '' : 'line-clamp-3'}`}>
-                  {ALBUM_DESCRIPTIONS[era.name]}
+                  {era.description || ALBUM_DESCRIPTIONS[era.name]}
                 </p>
-                <button 
+                <button
                   onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                   className="text-[var(--theme-color)] text-xs font-bold mt-1 hover:underline cursor-pointer"
                 >

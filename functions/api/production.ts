@@ -89,6 +89,7 @@ export const onRequestGet: PagesFunction = async (context) => {
         eras[rawName] = {
           name: rawName,
           extra: extra ?? undefined,
+          description: row['Type']?.trim() || undefined,
           timeline: row['Notes']?.trim() || undefined,
           fileInfo: eraField.split('\n').map((l: string) => l.trim()).filter(Boolean),
           data: {
