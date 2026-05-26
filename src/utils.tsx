@@ -4,117 +4,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import { saveAs } from 'file-saver';
 import { useSettings } from './SettingsContext';
 
-export const TAG_TOOLTIP_MAP: Record<string, string> = {
-  'Best Of': 'some of the best leaks hosted on the tracker.',
-  'Grails': 'the most wanted songs that have not yet leaked in full.',
-  'Wanted': 'Songs that are wanted, but not as wanted as "Grails".',
-  'Special': 'special songs that are not good enough to be in Best Of, but still deserves to be highlighted.',
-  'Worst Of': 'some of the worst leaks hosted on the tracker.',
-  'Unwanted': 'Songs that we don\'t want to leak in full because they\'re shit',
-  'AI': 'Track contains AI vocals.',
-  'Lost Media': 'Is currently lost, or we don\'t have a link to the media.',
-  'By XGOLD': 'Leaks & Songs that added by the owner of the site.'
-};
+// All artist-specific constants come from artist.config.ts
+export { TAG_TOOLTIP_MAP, TAG_MAP, CUSTOM_IMAGES, ALBUM_RELEASE_DATES, HIDDEN_ALBUMS, ALBUM_DESCRIPTIONS } from './artist.config';
 
-export const CUSTOM_IMAGES: Record<string, string> = {
-  "CD MIxtape": "https://i1.sndcdn.com/artworks-000050858687-yx1vkr-t500x500.jpg",
-  "XXX (UNMASTERED)": "https://i1.sndcdn.com/artworks-000072678730-pc68jn-t500x500.jpg",
-  "Ice Hotel": "https://i1.sndcdn.com/artworks-000076247700-vwqxk6-t500x500.jpg",
-  "e.motion": "https://i1.sndcdn.com/artworks-000078038814-k4evss-t500x500.jpg",
-  "THE NOBODYS": "https://i1.sndcdn.com/artworks-000084889824-mysx55-t500x500.jpg",
-  "The Fall": "https://i1.sndcdn.com/artworks-000098596528-u0tib8-t500x500.jpg",
-  "♡ ʳ ᵃ ʳ ᵉ ♡": "https://i1.sndcdn.com/artworks-000098836070-hqshe0-t500x500.jpg",
-  "Heartbreak Hotel": "https://i.ibb.co/6phxk19/images.jpg",
-  "Red Light District": "https://i1.sndcdn.com/artworks-000106984324-hoacw6-t500x500.jpg",
-  "Members Only Vol. 1": "https://i1.sndcdn.com/artworks-000114071300-tqp2qq-t500x500.jpg",
-  "Members Only Vol. 2": "https://i1.sndcdn.com/artworks-000134570648-u0bm7g-t500x500.jpg",
-  "KIDS": "https://i1.sndcdn.com/artworks-000142007246-k7vpch-t500x500.jpg",
-  "IWABOS": "https://i1.sndcdn.com/artworks-000151618735-ixbrxo-t500x500.jpg",
-  "Bad Vibes Forever": "https://i.ibb.co/kVh6G72x/db9070cccc3ec21481890db4b4afc22a-713x713x1.png",
-  "Death Note": "https://i.ibb.co/hRQyNx11/e8c24b707b3f69286206dda105362f67-1000x1000x1.png",
-  "Members Only Vol. 3": "https://i1.sndcdn.com/artworks-000218256676-xh53vm-t500x500.jpg",
-  "17": "https://i1.sndcdn.com/artworks-000239703817-bj42u2-t500x500.jpg",
-  "I Need Jesus": "https://i.ibb.co/7dZh16LD/artworks-f-Qbb-W4-MK9eb-OHZAx-Nq-Fm-ZQ-t1080x1080.jpg",
-  "UGLY": "https://i.ibb.co/MyjnMmvL/18eba54f17ea4aeca8117ca94f7f28db-576x576x1.jpg",
-  "A GHETTO CHRISTMAS CAROL": "https://i1.sndcdn.com/artworks-000268115540-dl9cjr-t500x500.jpg",
-  "?": "https://i1.sndcdn.com/artworks-4060dcd4-4dcd-45f1-83dd-a1bc60a5d274-0-t500x500.jpg",
-  "SKINS": "https://i1.sndcdn.com/artworks-000453785514-jdq64s-t500x500.jpg",
-  "Members Only Vol. 4": "https://i1.sndcdn.com/artworks-000476299347-ph7cc2-t500x500.jpg",
-  "? (Deluxe)": "https://i1.sndcdn.com/artworks-6cc4793e-84fb-4298-a68a-a763bbe0838d-0-t500x500.jpg",
-  "Bad Vibes Forever (2019)": "https://i1.sndcdn.com/artworks-000647343067-7vnz5w-t500x500.jpg",
-  "LOOK AT ME: THE ALBUM": "https://i1.sndcdn.com/artworks-w5VNHDyS7taTo28M-BK3lJA-t500x500.jpg",
-  "LOOK AT ME: XXXTENTACION": "https://i1.sndcdn.com/artworks-981958f2-2de0-40d5-8312-63dff92b15fe-0-t500x500.jpg",
-  "Ongoing": "https://i.ibb.co/MyQPJsmh/download-8.jpg",
-  "Unknown": "https://i.ibb.co/ymnyNNhW/download-9.jpg",
-};
-
-export const ALBUM_RELEASE_DATES: Record<string, string> = {
-  "CD MIxtape": "??/??/2013",
-  "XXX (UNMASTERED)": "02/12/2014",
-  "Ice Hotel": "04/07/2014",
-  "e.motion": "04/30/2014",
-  "THE NOBODYS": "07/11/2014",
-  "The Fall": "11/28/2014",
-  "♡ ʳ ᵃ ʳ ᵉ ♡": "12/01/2014",
-  "Heartbreak Hotel": "02/03/2015",
-  "Red Light District": "01/??/2015",
-  "Members Only Vol. 1": "04/20/2015",
-  "Members Only Vol. 2": "10/31/2015",
-  "KIDS": "01/22/2016",
-  "IWABOS": "03/18/2016",
-  "Bad Vibes Forever": "??/??/2016",
-  "Death Note": "??/??/2017",
-  "Members Only Vol. 3": "06/26/2017",
-  "Revenge": "05/16/2017",
-  "17": "08/25/2017",
-  "I Need Jesus": "??/??/2017",
-  "UGLY": "??/??/2017",
-  "A GHETTO CHRISTMAS CAROL": "12/11/2017",
-  "?": "03/16/2018",
-  "SKINS": "12/07/2018",
-  "Members Only Vol. 4": "01/23/2019",
-  "? (Deluxe)": "09/06/2019",
-  "Bad Vibes Forever (2019)": "12/06/2019",
-  "LOOK AT ME: THE ALBUM": "06/10/2022",
-  "LOOK AT ME: XXXTENTACION": "05/26/2022",
-  "Ongoing": "??/??/????",
-  "Unknown": "??/??/????",
-};
-
-export const HIDDEN_ALBUMS: string[] = [];
-
-export const ALBUM_DESCRIPTIONS: Record<string, string> = {
-  "CD MIxtape": "X's very first project, released in 2013 on SoundCloud before his rise to prominence. An early window into the raw, untamed sound he would go on to develop across dozens of tapes and projects.",
-  "XXX (UNMASTERED)": "Released in February 2014, XXX (UNMASTERED) is one of X's earliest SoundCloud tapes. The project features dark, experimental production and a raw emotional intensity that would define his early catalogue.",
-  "Ice Hotel": "Released in April 2014, Ice Hotel is X's second major SoundCloud tape of the year. The project expands his sonic palette while retaining the unfiltered emotional energy that made his earliest work so compelling.",
-  "e.motion": "The third of X's early 2014 SoundCloud tapes, e.motion features some of his most emotionally raw material, blending lo-fi aesthetics with themes of heartbreak, isolation, and adolescent rage.",
-  "THE NOBODYS": "A mid-2014 collaborative tape released by X with his Members Only collective. THE NOBODYS finds X working in a group setting and refining the aggressive, stream-of-consciousness style that would later make him famous.",
-  "The Fall": "Released in November 2014, The Fall is a darker, more introspective tape that showcases X's emotional range — cycling between explosive aggression and quiet vulnerability within a single project.",
-  "♡ ʳ ᵃ ʳ ᵉ ♡": "A short but beloved tape released in December 2014. ♡ ʳ ᵃ ʳ ᵉ ♡ contains some of X's most celebrated early tracks and captures a rare moment of warmth and tenderness amid his often turbulent early output.",
-  "Heartbreak Hotel": "Released in February 2015, Heartbreak Hotel is widely considered one of X's best early projects. The tape is emotionally devastating and musically adventurous, blending rap, emo, and lo-fi experimentation.",
-  "Red Light District": "A 2015 tape known for its dark aesthetic and experimental sound. Red Light District pushed further into the genre-blending territory X was rapidly claiming as his own.",
-  "Members Only Vol. 1": "The first entry in the Members Only compilation series, featuring X alongside his collective. The tape provided an early showcase for X's versatility as both a rapper and songwriter.",
-  "Members Only Vol. 2": "The second Members Only compilation, released October 2015. X contributes some of his strongest early work across a tape that highlights the collective's range and collaborative chemistry.",
-  "KIDS": "Released January 2016, KIDS is a pivotal tape in X's discography. Featuring tracks that would later go viral and substantially expand his audience, the project introduced many fans to his SoundCloud universe.",
-  "IWABOS": "ItWillAllBeOverSoon, released March 2016. A project that documented X's continued musical evolution and cemented his reputation as one of SoundCloud's most singular voices.",
-  "Bad Vibes Forever": "A defining era that would give X's label its name — Bad Vibes Forever. The project reflects a darkening worldview and a sharper lyrical blade, signaling the beginning of his mainstream breakthrough period.",
-  "Death Note": "A brief but notable era of unreleased tracks from 2017, as X began transitioning from SoundCloud cult figure to mainstream breakthrough artist.",
-  "Members Only Vol. 3": "The third Members Only compilation, released in June 2017. By this point X had become the most prominent figure in the collective, and this tape arrived just as his solo career was breaking into the mainstream.",
-  "Revenge": "Released in May 2017 while X was incarcerated, Revenge contains some of his most aggressive and emotionally raw work. The circumstances of its creation lend the project an urgency and desperation that's impossible to ignore.",
-  "17": "X's debut studio album, released August 25, 2017. A brief, devastating record exploring depression, suicidal ideation, loneliness, and the search for meaning. Produced primarily by X himself with John Cunningham, it strips everything back to raw emotion and became one of the most influential albums in the SoundCloud rap movement.",
-  "I Need Jesus": "A 2017 era reflecting X's interest in spirituality and religion. These unreleased tracks capture a contemplative, searching side of X that would resurface throughout his career.",
-  "UGLY": "An era of unreleased material from X's later period, representing sessions and ideas that never made it onto a completed project.",
-  "A GHETTO CHRISTMAS CAROL": "A holiday-themed project released December 2017. A GHETTO CHRISTMAS CAROL finds X in an unexpectedly playful and festive mood, providing a contrast to the darkness that defined much of his other work.",
-  "?": "X's second and final studio album, released March 16, 2018. A more expansive and genre-defying record that became his biggest commercial success, debuting at #1 on the Billboard 200. Fusing rap, rock, R&B, and pop, ? showcased X's broadening ambitions. He was murdered in Lauderdale Lakes, Florida on June 18, 2018, just three months after its release.",
-  "SKINS": "The first posthumous album released by X's estate in December 2018, featuring a mix of finished tracks and works-in-progress X had been developing before his death. SKINS received mixed reactions, with many fans and critics debating the ethics of releasing unfinished material.",
-  "Members Only Vol. 4": "The final Members Only compilation, released January 2019 by the collective in the wake of X's passing. A bittersweet conclusion to the series he helped define.",
-  "? (Deluxe)": "An expanded deluxe edition of X's ? album, released September 2019 with additional tracks and material from the original recording sessions.",
-  "Bad Vibes Forever (2019)": "The second posthumous album, released December 2019. Bad Vibes Forever (2019) features collaborations and tracks X had recorded before his death, assembled by his estate and close collaborators.",
-  "LOOK AT ME: THE ALBUM": "A companion album released alongside the 2022 Hulu documentary Look At Me: XXXTENTACION, featuring archival recordings and deep cuts that trace X's artistic journey from his earliest SoundCloud days to his final recordings.",
-  "LOOK AT ME: XXXTENTACION": "Unreleased and rare material surfacing around the 2022 Hulu documentary of the same name. These tracks offer an intimate look at X's creative process and the sessions that defined his legacy.",
-  "Ongoing": "",
-  "Unknown": "",
-};
 
 export const FILTER_TOOLTIPS: Record<string, string> = {
   'Snippet': 'Less than a minute of the song is available.',
@@ -187,21 +79,6 @@ export function buildArtistTag(songName: string, eraName: string | undefined): s
   return primary;
 }
 
-export const TAG_MAP: Record<string, string> = {
-  '⭐': 'Best Of',
-  '🏆': 'Grails',
-  '🥇': 'Wanted',
-  '🏅': 'Wanted',
-  '✨': 'Special',
-  '💛': 'By XGOLD',
-  '🗑️': 'Worst Of',
-  '🗑': 'Worst Of',
-  '🚮': 'Unwanted',
-  '🤖': 'AI',
-  '⁉️': 'Lost Media',
-  '⁉': 'Lost Media',
-  '❓': 'Unknown'
-};
 
 export function formatTextForNotification(text: string | undefined | null, tagsAsEmojis: boolean): string {
   if (!text) return '';
