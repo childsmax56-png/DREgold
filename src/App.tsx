@@ -299,7 +299,7 @@ export default function App() {
             const savedEraName = parsed.eraName;
 
             if (savedSong && savedEraName) {
-              const erasValues = Object.values(data.eras || {}) as Era[];
+              const erasValues = (data.eras || []) as Era[];
               let eraToRestore: Era | null = erasValues.find(e => e.name === savedEraName) || null;
 
               if (!eraToRestore && savedEraName === 'Recent Leaks') {
@@ -472,6 +472,8 @@ export default function App() {
         const categoriesToNormalize = ['eras', 'art', 'misc', 'stems', 'fakes', 'reference_track'];
         categoriesToNormalize.forEach(category => {
           if (!json[category]) return;
+          // eras is now an array — ERA_MAPPINGS renaming not needed (it's empty)
+          if (category === 'eras' && Array.isArray(json[category])) return;
           const rebuilt: Record<string, any> = {};
           Object.keys(json[category]).forEach(key => {
             const matchedMapKey = Object.keys(ERA_MAPPINGS).find(k => k.toLowerCase() === key.toLowerCase());
@@ -576,7 +578,7 @@ export default function App() {
         } else if (path.startsWith('/tracklists/')) {
           setActiveCategory('tracklists');
           const slug = path.split('/tracklists/')[1];
-          const erasValues = Object.values(json.eras || {}) as Era[];
+          const erasValues = (json.eras || []) as Era[];
           const match = erasValues.find(e => createSlug(e.name) === slug);
           if (match) {
             setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -588,7 +590,7 @@ export default function App() {
         } else if (path.startsWith('/production/')) {
           setActiveCategory('production');
           const slug = path.split('/production/')[1];
-          const prodErasValues = Object.values(productionRes.data?.eras || {}) as Era[];
+          const prodErasValues = (productionRes.data?.eras || []) as Era[];
           const match = prodErasValues.find(e => createSlug(e.name) === slug);
           if (match) {
             setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -599,7 +601,7 @@ export default function App() {
           setActiveCategory('production');
         } else if (path.startsWith('/album/')) {
           const slug = path.split('/album/')[1];
-          const erasValues = Object.values(json.eras || {}) as Era[];
+          const erasValues = (json.eras || []) as Era[];
           const match = erasValues.find(e => createSlug(e.name) === slug);
           if (match) {
             setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -826,7 +828,7 @@ export default function App() {
         setActiveCategory('music');
       } else if (path.startsWith('/album/') && data) {
         const slug = path.split('/album/')[1];
-        const erasValues = Object.values(data.eras || {}) as Era[];
+        const erasValues = (data.eras || []) as Era[];
         const match = erasValues.find(e => createSlug(e.name) === slug);
         if (match) {
           setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -837,7 +839,7 @@ export default function App() {
         }
       } else if (path.startsWith('/production/') && productionData) {
         const slug = path.split('/production/')[1];
-        const erasValues = Object.values(productionData.eras || {}) as Era[];
+        const erasValues = (productionData.eras || []) as Era[];
         const match = erasValues.find(e => createSlug(e.name) === slug);
         if (match) {
           setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -851,7 +853,7 @@ export default function App() {
         setActiveCategory('production');
       } else if (path.startsWith('/tracklists/') && data) {
         const slug = path.split('/tracklists/')[1];
-        const erasValues = Object.values(data.eras || {}) as Era[];
+        const erasValues = (data.eras || []) as Era[];
         const match = erasValues.find(e => createSlug(e.name) === slug);
         if (match) {
           setSelectedAlbum({ ...match, fileInfo: CUSTOM_ALBUM_INFO[match.name] || match.fileInfo, image: CUSTOM_IMAGES[match.name] || match.image });
@@ -1316,14 +1318,14 @@ export default function App() {
     );
   }
 
-  let erasArray = (Object.values(data.eras || {}) as Era[])
+  let erasArray = ((data.eras || []) as Era[])
     .filter(era => !HIDDEN_ALBUMS.includes(era.name))
     .map(era => ({
       ...era,
       fileInfo: CUSTOM_ALBUM_INFO[era.name] || era.fileInfo
     })) as Era[];
 
-  let productionErasArray = (Object.values(productionData?.eras || {}) as Era[])
+  let productionErasArray = ((productionData?.eras || []) as Era[])
     .map(era => ({
       ...era,
       fileInfo: CUSTOM_ALBUM_INFO[era.name] || era.fileInfo
@@ -1414,7 +1416,7 @@ export default function App() {
         .map(song => {
           const rawEraName = song.extra2 || song.extra;
           const cleanEraName = rawEraName ? getCleanSongNameWithTags(rawEraName) : '';
-          const realEra = Object.values(data?.eras || {}).find((e: any) => e.name === rawEraName || e.name === cleanEraName) as Era;
+          const realEra = (data?.eras || []).find((e: any) => e.name === rawEraName || e.name === cleanEraName) as Era;
           return {
             ...song,
             image: CUSTOM_IMAGES[rawEraName || ''] || CUSTOM_IMAGES[cleanEraName || ''] || CUSTOM_IMAGES[realEra?.name || ''] || realEra?.image || song.image,
@@ -1429,8 +1431,7 @@ export default function App() {
     if (!sourceData?.eras) return;
 
     const allMusicSongs: (Song & { realEra: Era })[] = [];
-    Object.keys(sourceData.eras).forEach(eraKey => {
-      const era = sourceData.eras[eraKey];
+    (sourceData.eras as Era[]).forEach((era: Era) => {
 
       if (era.data) {
         Object.values(era.data).flat().forEach(song => {

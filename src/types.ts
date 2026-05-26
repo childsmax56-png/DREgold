@@ -36,7 +36,7 @@ export interface TrackerData {
   name: string;
   tabs: string[];
   current_tab: string;
-  eras: Record<string, Era>;
+  eras: Era[];
 }
 
 export interface PlaylistSong {

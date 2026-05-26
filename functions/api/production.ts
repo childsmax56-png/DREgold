@@ -213,20 +213,22 @@ export const onRequestGet: PagesFunction = async (context) => {
       'Hot Water',
     ];
 
-    const orderedEras: Record<string, any> = {};
+    // Build eras as an ordered array to avoid JS integer-key reordering
+    const orderedErasArray: any[] = [];
+    const seen = new Set<string>();
     for (const name of ERA_ORDER) {
-      if (eras[name]) orderedEras[name] = eras[name];
+      if (eras[name]) { orderedErasArray.push(eras[name]); seen.add(name); }
     }
     // Append any eras from the CSV not in the order list
     for (const name of Object.keys(eras)) {
-      if (!orderedEras[name]) orderedEras[name] = eras[name];
+      if (!seen.has(name)) orderedErasArray.push(eras[name]);
     }
 
     const trackerData = {
       name: 'DREGOLD',
       tabs: ['eras'],
       current_tab: 'eras',
-      eras: orderedEras,
+      eras: orderedErasArray,
     };
 
     return csvResponse(trackerData);
