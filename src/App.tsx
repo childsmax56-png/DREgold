@@ -943,7 +943,9 @@ export default function App() {
             isPlayable = false;
           }
         } else {
-          streamUrl = rawUrl;
+          // Convert pillows.su/f/<hash> share link → direct API stream URL
+          const hash = rawUrl.split('/f/')[1]?.split('/')[0]?.split('?')[0];
+          streamUrl = hash ? `https://api.pillows.su/api/get/${hash}` : rawUrl;
         }
       } catch (e) {
         isPlayable = false;
